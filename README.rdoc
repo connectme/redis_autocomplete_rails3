@@ -1,8 +1,8 @@
-= rails3_redis_autocomplete
+= redis_autocomplete_rails3
 
 Description goes here.
 
-== Contributing to rails3_redis_autocomplete
+== Contributing to redis_autocomplete_rails3
  
 * Check out the latest master to make sure the feature hasn't been implemented or the bug hasn't been fixed yet
 * Check out the issue tracker to make sure someone already hasn't requested it and/or contributed it

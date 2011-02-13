@@ -1,4 +1,4 @@
-module Rail3RedisAutocomplete
+module RedisAutocompleteRails3
   def self.included(base)
     base.send :extend, ClassMethods
   end
@@ -10,10 +10,18 @@ module Rail3RedisAutocomplete
       # todo: make sure fields are all valid
       cattr_accessor :redis_autocomplete_set_prefix, :redis_autocomplete_fields, :redis_autocompleter
       opts = fields.extract_options!
-      self.redis_autocomplete_set_prefix = opts.delete(:set_prefix) || 'rails3_redis_autocomplete'
+      self.redis_autocomplete_set_prefix = opts.delete(:set_prefix) || 'redis_autocomplete_rails3'
       
       self.redis_autocomplete_fields = Hash[fields.map do |field|
-        [field, :"#{self.redis_autocomplete_set_prefix}_#{model_name.underscore}_#{field}"]
+        set_name = "#{self.redis_autocomplete_set_prefix}_#{model_name.underscore}_#{field}"
+
+        self.instance_eval %{
+          def suggest_#{field}(term, count = 10)
+            self.redis_autocompleter.suggest(term, count, "#{set_name}")
+          end
+        }
+
+        [field, set_name]
       end]
       self.redis_autocompleter = RedisAutocomplete.new(opts)
 
@@ -48,4 +56,4 @@ module Rail3RedisAutocomplete
   end
 end
 
-ActiveRecord::Base.send :include, Rail3RedisAutocomplete
+ActiveRecord::Base.send :include, RedisAutocompleteRails3

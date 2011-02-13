@@ -1,1 +1,0 @@
-require 'rails3_redis_autocomplete/active_record'

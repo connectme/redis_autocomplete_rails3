@@ -1,1 +1,1 @@
-require 'rails3_redis_autocomplete'
+require 'redis_autocomplete_rails3'
